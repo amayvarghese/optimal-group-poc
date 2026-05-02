@@ -19,6 +19,13 @@ app.use(
 )
 app.use(express.json())
 
+app.get('/', (_req, res) => {
+  res.json({ ok: true, service: 'optimal-ai-operations-api' })
+})
+app.get('/health', (_req, res) => {
+  res.json({ ok: true })
+})
+
 const userSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true, unique: true, index: true },

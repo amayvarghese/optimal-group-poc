@@ -1,0 +1,25 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# After first deploy, set secret env vars in the Render dashboard if sync: false.
+
+services:
+  - type: web
+    name: optimal-backend
+    runtime: node
+    plan: free
+    region: ohio
+    branch: main
+    rootDir: backend
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: OPS_API_KEY
+        sync: false
