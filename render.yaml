@@ -10,7 +10,8 @@ services:
     name: optimal-backend
     runtime: node
     plan: free
-    region: oregon
+    # Cannot be changed after the service is created — must match your existing service.
+    region: ohio
     branch: main
     rootDir: backend
     buildCommand: npm ci --omit=dev
