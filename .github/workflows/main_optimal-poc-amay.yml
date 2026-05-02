@@ -11,26 +11,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22.x'
+          node-version: 22
 
-      # 3. Install backend dependencies
       - name: Install backend dependencies
         working-directory: backend
         run: npm ci
 
-      # 4. Deploy backend to Azure
+      - name: Zip backend for deployment
+        run: zip -r release.zip backend
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'optimal-poc-amay'
-          slot-name: 'Production'
-          package: backend
+          app-name: optimal-poc-amay
+          slot-name: Production
+          package: release.zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_10AEBA4E923247369EC5074A3656EF94 }}
