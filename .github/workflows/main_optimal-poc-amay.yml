@@ -28,5 +28,5 @@ jobs:
         with:
           app-name: 'optimal-poc-amay'
           slot-name: 'Production'
-          package: backend
+          package: backend .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_10AEBA4E923247369EC5074A3656EF94 }}
