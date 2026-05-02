@@ -1,12 +1,16 @@
 # Render Blueprint: https://render.com/docs/blueprint-spec
-# After first deploy, set secret env vars in the Render dashboard if sync: false.
+#
+# When applying the Blueprint, you MUST set MONGODB_URI (and should set JWT_SECRET,
+# OPS_API_KEY, FRONTEND_URL) in the prompts — empty secrets crash the app on boot.
+#
+# Or create a Web Service manually: rootDir backend, build npm ci --omit=dev, start npm start
 
 services:
   - type: web
     name: optimal-backend
     runtime: node
     plan: free
-    region: ohio
+    region: oregon
     branch: main
     rootDir: backend
     buildCommand: npm ci --omit=dev
@@ -15,11 +19,14 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      # Pin Node so local and Render match; see https://render.com/docs/node-version
+      - key: NODE_VERSION
+        value: "22.12.0"
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET
-        sync: false
+        generateValue: true
       - key: FRONTEND_URL
-        sync: false
+        value: http://localhost:5173
       - key: OPS_API_KEY
-        sync: false
+        generateValue: true

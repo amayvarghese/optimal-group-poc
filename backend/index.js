@@ -429,11 +429,19 @@ const start = async () => {
     throw new Error('Missing JWT_SECRET in environment.')
   }
 
-  await mongoose.connect(process.env.MONGODB_URI)
   const port = Number(process.env.PORT || 4000)
+  // Listen before Mongo connects so PaaS health checks (e.g. Render /health) pass quickly.
   app.listen(port, () => {
-    console.log(`API running on http://localhost:${port}`)
+    console.log(`API listening on port ${port}`)
   })
+
+  try {
+    await mongoose.connect(process.env.MONGODB_URI)
+    console.log('MongoDB connected')
+  } catch (error) {
+    console.error('MongoDB connection failed:', error)
+    process.exit(1)
+  }
 }
 
 start().catch((error) => {
